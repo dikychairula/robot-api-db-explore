@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.1.1 (Python 3.13.1 on win32)" generated="2025-02-17T16:40:30.738743" rpa="false" schemaversion="5">
+<suite id="s1" name="Fetch Books Api" source="c:\Users\MyBook Hype AMD\Documents\Robot Framework\robot-api-db-explore\fetch-api-db\fetch_books_api.robot">
+<test id="s1-t1" name="Fetch and Insert Books" line="15">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2025-02-17T16:40:32.205217" level="INFO">GET Request : url=http://simple-books-api.glitch.me/books 
+ path_url=/books 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2025-02-17T16:40:32.208480" level="INFO">GET Response : url=http://simple-books-api.glitch.me/books 
+ status=200, reason=OK 
+ headers={'Connection': 'keep-alive', 'Content-Length': '417', 'Content-Type': 'application/json; charset=utf-8', 'x-powered-by': 'Express', 'etag': 'W/"1a1-MfqhfTYtZO2sguD1mJq8Vf41WjU"', 'Accept-Ranges': 'bytes', 'Date': 'Mon, 17 Feb 2025 09:40:32 GMT', 'Via': '1.1 varnish', 'X-Served-By': 'cache-qpg120086-QPG', 'X-Cache': 'MISS', 'X-Cache-Hits': '0', 'X-Timer': 'S1739785232.960888,VS0,VE268'} 
+ body=[{"id":1,"name":"The Russian","type":"fiction","available":true},{"id":2,"name":"Just as I Am","type":"non-fiction","available":false},{"id":3,"name":"The Vanishing Half","type":"fiction","available":true},{"id":4,"name":"The Midnight Library","type":"fiction","available":true},{"id":5,"name":"Untamed","type":"non-fiction","available":true},{"id":6,"name":"Viscount Who Loved Me","type":"fiction","available":true}] 
+ </msg>
+<msg time="2025-02-17T16:40:32.208933" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${API_URL}</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2025-02-17T16:40:31.775980" elapsed="0.433312"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.212826" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.211063" elapsed="0.002245"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.216706" level="INFO">${books} = [{'id': 1, 'name': 'The Russian', 'type': 'fiction', 'available': True}, {'id': 2, 'name': 'Just as I Am', 'type': 'non-fiction', 'available': False}, {'id': 3, 'name': 'The Vanishing Half', 'type': '...</msg>
+<var>${books}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.215112" elapsed="0.001917"/>
+</kw>
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2025-02-17T16:40:32.220275" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2025-02-17T16:40:32.220853" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2025-02-17T16:40:32.270811" level="INFO">Connect to DB using : pymysql.connect(db='db_book_api', user='root', passwd=***, host='localhost', port=3306, charset='utf8mb4')</msg>
+<arg>pymysql</arg>
+<arg>${DB_NAME}</arg>
+<arg>${DB_USER}</arg>
+<arg>${DB_PASSWORD}</arg>
+<arg>${DB_HOST}</arg>
+<arg>${DB_PORT}</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.219139" elapsed="0.055752"/>
+</kw>
+<for flavor="IN">
+<iter>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.278457" level="INFO">${id} = 1</msg>
+<var>${id}</var>
+<arg>${book["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.277234" elapsed="0.001463"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.279827" level="INFO">${name} = The Russian</msg>
+<var>${name}</var>
+<arg>${book["name"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.278987" elapsed="0.001013"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.281065" level="INFO">${type} = fiction</msg>
+<var>${type}</var>
+<arg>${book["type"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.280280" elapsed="0.000970"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.282342" level="INFO">${available} = True</msg>
+<var>${available}</var>
+<arg>${book["available"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.281521" elapsed="0.000991"/>
+</kw>
+<kw name="Execute Sql String" owner="DatabaseLibrary">
+<msg time="2025-02-17T16:40:32.283205" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;INSERT INTO books VALUES ('1', 'The Russian', 'fiction', True)&lt;/code&gt;</msg>
+<msg time="2025-02-17T16:40:32.284173" level="INFO">Commit the transaction</msg>
+<arg>INSERT INTO books VALUES ('${id}', '${name}', '${type}', ${available})</arg>
+<doc>Executes the ``sql_string`` as a single SQL command.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.282762" elapsed="0.008847"/>
+</kw>
+<var name="${book}">{'id': 1, 'name': 'The Russian', 'type': 'fiction', 'available': True}</var>
+<status status="PASS" start="2025-02-17T16:40:32.276681" elapsed="0.015325"/>
+</iter>
+<iter>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.294267" level="INFO">${id} = 2</msg>
+<var>${id}</var>
+<arg>${book["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.292986" elapsed="0.001621"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.296651" level="INFO">${name} = Just as I Am</msg>
+<var>${name}</var>
+<arg>${book["name"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.295129" elapsed="0.001861"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.298948" level="INFO">${type} = non-fiction</msg>
+<var>${type}</var>
+<arg>${book["type"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.297476" elapsed="0.001753"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.300997" level="INFO">${available} = False</msg>
+<var>${available}</var>
+<arg>${book["available"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.299689" elapsed="0.001595"/>
+</kw>
+<kw name="Execute Sql String" owner="DatabaseLibrary">
+<msg time="2025-02-17T16:40:32.302279" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;INSERT INTO books VALUES ('2', 'Just as I Am', 'non-fiction', False)&lt;/code&gt;</msg>
+<msg time="2025-02-17T16:40:32.303396" level="INFO">Commit the transaction</msg>
+<arg>INSERT INTO books VALUES ('${id}', '${name}', '${type}', ${available})</arg>
+<doc>Executes the ``sql_string`` as a single SQL command.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.301644" elapsed="0.006440"/>
+</kw>
+<var name="${book}">{'id': 2, 'name': 'Just as I Am', 'type': 'non-fiction', 'available': False}</var>
+<status status="PASS" start="2025-02-17T16:40:32.292568" elapsed="0.015886"/>
+</iter>
+<iter>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.311000" level="INFO">${id} = 3</msg>
+<var>${id}</var>
+<arg>${book["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.309533" elapsed="0.001756"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.313390" level="INFO">${name} = The Vanishing Half</msg>
+<var>${name}</var>
+<arg>${book["name"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.312121" elapsed="0.001529"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.315424" level="INFO">${type} = fiction</msg>
+<var>${type}</var>
+<arg>${book["type"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.314016" elapsed="0.001707"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.317667" level="INFO">${available} = True</msg>
+<var>${available}</var>
+<arg>${book["available"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.316162" elapsed="0.001795"/>
+</kw>
+<kw name="Execute Sql String" owner="DatabaseLibrary">
+<msg time="2025-02-17T16:40:32.319141" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;INSERT INTO books VALUES ('3', 'The Vanishing Half', 'fiction', True)&lt;/code&gt;</msg>
+<msg time="2025-02-17T16:40:32.320677" level="INFO">Commit the transaction</msg>
+<arg>INSERT INTO books VALUES ('${id}', '${name}', '${type}', ${available})</arg>
+<doc>Executes the ``sql_string`` as a single SQL command.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.318392" elapsed="0.007290"/>
+</kw>
+<var name="${book}">{'id': 3, 'name': 'The Vanishing Half', 'type': 'fiction', 'available': True}</var>
+<status status="PASS" start="2025-02-17T16:40:32.309074" elapsed="0.016961"/>
+</iter>
+<iter>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.328292" level="INFO">${id} = 4</msg>
+<var>${id}</var>
+<arg>${book["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.326959" elapsed="0.001625"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.330268" level="INFO">${name} = The Midnight Library</msg>
+<var>${name}</var>
+<arg>${book["name"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.329032" elapsed="0.001505"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.332260" level="INFO">${type} = fiction</msg>
+<var>${type}</var>
+<arg>${book["type"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.330958" elapsed="0.001620"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.359171" level="INFO">${available} = True</msg>
+<var>${available}</var>
+<arg>${book["available"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.336429" elapsed="0.023104"/>
+</kw>
+<kw name="Execute Sql String" owner="DatabaseLibrary">
+<msg time="2025-02-17T16:40:32.360780" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;INSERT INTO books VALUES ('4', 'The Midnight Library', 'fiction', True)&lt;/code&gt;</msg>
+<msg time="2025-02-17T16:40:32.362223" level="INFO">Commit the transaction</msg>
+<arg>INSERT INTO books VALUES ('${id}', '${name}', '${type}', ${available})</arg>
+<doc>Executes the ``sql_string`` as a single SQL command.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.359983" elapsed="0.008198"/>
+</kw>
+<var name="${book}">{'id': 4, 'name': 'The Midnight Library', 'type': 'fiction', 'available': True}</var>
+<status status="PASS" start="2025-02-17T16:40:32.326524" elapsed="0.042255"/>
+</iter>
+<iter>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.371374" level="INFO">${id} = 5</msg>
+<var>${id}</var>
+<arg>${book["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.369841" elapsed="0.001866"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.373746" level="INFO">${name} = Untamed</msg>
+<var>${name}</var>
+<arg>${book["name"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.372161" elapsed="0.001853"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.375887" level="INFO">${type} = non-fiction</msg>
+<var>${type}</var>
+<arg>${book["type"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.374547" elapsed="0.001603"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.377906" level="INFO">${available} = True</msg>
+<var>${available}</var>
+<arg>${book["available"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.376556" elapsed="0.001642"/>
+</kw>
+<kw name="Execute Sql String" owner="DatabaseLibrary">
+<msg time="2025-02-17T16:40:32.379556" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;INSERT INTO books VALUES ('5', 'Untamed', 'non-fiction', True)&lt;/code&gt;</msg>
+<msg time="2025-02-17T16:40:32.380579" level="INFO">Commit the transaction</msg>
+<arg>INSERT INTO books VALUES ('${id}', '${name}', '${type}', ${available})</arg>
+<doc>Executes the ``sql_string`` as a single SQL command.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.378727" elapsed="0.007113"/>
+</kw>
+<var name="${book}">{'id': 5, 'name': 'Untamed', 'type': 'non-fiction', 'available': True}</var>
+<status status="PASS" start="2025-02-17T16:40:32.369381" elapsed="0.016825"/>
+</iter>
+<iter>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.388600" level="INFO">${id} = 6</msg>
+<var>${id}</var>
+<arg>${book["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.387236" elapsed="0.001665"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.390572" level="INFO">${name} = Viscount Who Loved Me</msg>
+<var>${name}</var>
+<arg>${book["name"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.389335" elapsed="0.001508"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.392825" level="INFO">${type} = fiction</msg>
+<var>${type}</var>
+<arg>${book["type"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.391332" elapsed="0.001825"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-17T16:40:32.395091" level="INFO">${available} = True</msg>
+<var>${available}</var>
+<arg>${book["available"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.393620" elapsed="0.001779"/>
+</kw>
+<kw name="Execute Sql String" owner="DatabaseLibrary">
+<msg time="2025-02-17T16:40:32.396493" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;INSERT INTO books VALUES ('6', 'Viscount Who Loved Me', 'fiction', True)&lt;/code&gt;</msg>
+<msg time="2025-02-17T16:40:32.397391" level="INFO">Commit the transaction</msg>
+<arg>INSERT INTO books VALUES ('${id}', '${name}', '${type}', ${available})</arg>
+<doc>Executes the ``sql_string`` as a single SQL command.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.395843" elapsed="0.006465"/>
+</kw>
+<var name="${book}">{'id': 6, 'name': 'Viscount Who Loved Me', 'type': 'fiction', 'available': True}</var>
+<status status="PASS" start="2025-02-17T16:40:32.386732" elapsed="0.016165"/>
+</iter>
+<var>${book}</var>
+<value>@{books}</value>
+<status status="PASS" start="2025-02-17T16:40:32.275894" elapsed="0.127390"/>
+</for>
+<kw name="Disconnect From Database" owner="DatabaseLibrary">
+<doc>Disconnects from the database.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.416223" elapsed="0.000835"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>${books}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.419119" elapsed="0.002610"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>"Data buku berhasil disimpan ke database!"</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-02-17T16:40:32.423214" elapsed="0.001056"/>
+</kw>
+<doc>Ambil data buku dari API lalu simpan ke database lokal</doc>
+<status status="PASS" start="2025-02-17T16:40:31.772550" elapsed="0.653272"/>
+</test>
+<status status="PASS" start="2025-02-17T16:40:30.749978" elapsed="1.678540"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="Fetch Books Api">Fetch Books Api</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
